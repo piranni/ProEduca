@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ProEduca</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to bottom, #0f172a, #1e293b, #0f172a);
+      color: white;
+      overflow-x: hidden;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      padding: 1rem 2rem;
+    }
+
+    nav .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    nav .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      background: linear-gradient(to right, #60a5fa, #a78bfa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    nav .links {
+      display: flex;
+      gap: 2rem;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: #60a5fa;
+    }
+
+    section {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4rem 2rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    #hero {
+      padding-top: 5rem;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .hero-text h1 {
+      font-size: 3.5rem;
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeInUp 1s forwards;
+    }
+
+    .hero-text .gradient-text {
+      background: linear-gradient(to right, #60a5fa, #a78bfa, #f472b6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-text p {
+      font-size: 1.25rem;
+      color: #cbd5e1;
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeInUp 1s 0.3s forwards;
+    }
+
+    .btn {
+      background: linear-gradient(to right, #3b82f6, #8b5cf6);
+      color: white;
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+      opacity: 0;
+      animation: fadeInUp 1s 0.6s forwards;
+    }
+
+    .btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 20px 40px rgba(59, 130, 246, 0.4);
+    }
+
+    .kindle-container {
+      perspective: 1000px;
+      opacity: 0;
+      animation: fadeInUp 1s 0.4s forwards;
+    }
+
+    .kindle {
+      background: #1e293b;
+      border-radius: 2rem;
+      padding: 2rem;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+      transition: transform 0.5s;
+      position: relative;
+    }
+
+    .kindle:hover {
+      transform: rotateY(5deg) rotateX(5deg);
+    }
+
+    .kindle::before {
+      content: '';
+      position: absolute;
+      inset: -20px;
+      background: linear-gradient(to right, #3b82f6, #8b5cf6);
+      border-radius: 2rem;
+      opacity: 0.3;
+      filter: blur(40px);
+      z-index: -1;
+      animation: pulse 3s infinite;
+    }
+
+    .kindle-screen {
+      background: linear-gradient(to bottom right, #334155, #0f172a);
+      border-radius: 1.5rem;
+      padding: 1.5rem;
+      border: 4px solid #475569;
+    }
+
+    .kindle-display {
+      background: white;
+      border-radius: 1rem;
+      aspect-ratio: 3/4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .kindle-icon {
+      width: 120px;
+      height: 120px;
+      opacity: 0.2;
+    }
+
+    .kindle-button {
+      width: 60px;
+      height: 4px;
+      background: #475569;
+      border-radius: 10px;
+      margin: 1rem auto 0;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 3rem;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s;
+    }
+
+    .section-title.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .section-title h2 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(to right, #60a5fa, #a78bfa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .section-title p {
+      font-size: 1.25rem;
+      color: #94a3b8;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .card {
+      background: rgba(30, 41, 59, 0.5);
+      border: 1px solid #334155;
+      border-radius: 1.5rem;
+      padding: 2rem;
+      transition: all 0.3s;
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    .card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .card:hover {
+      background: #1e293b;
+      transform: scale(1.05) translateY(0);
+      box-shadow: 0 20px 40px rgba(59, 130, 246, 0.2);
+    }
+
+    .card-icon {
+      width: 48px;
+      height: 48px;
+      color: #60a5fa;
+      margin-bottom: 1rem;
+    }
+
+    .card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .card p {
+      color: #94a3b8;
+      line-height: 1.6;
+    }
+
+    .mission {
+      background: linear-gradient(to right, #1e293b, #334155);
+      border-radius: 2rem;
+      padding: 3rem;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s;
+    }
+
+    .mission.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .mission h3 {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .mission p {
+      font-size: 1.1rem;
+      color: #cbd5e1;
+      line-height: 1.8;
+    }
+
+    .creators {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2.5rem;
+    }
+
+    .creator {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 2rem;
+      padding: 2rem;
+      text-align: center;
+      transition: all 0.3s;
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    .creator.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .creator:hover {
+      background: #334155;
+      transform: scale(1.05) translateY(0);
+    }
+
+    .creator-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      margin: 0 auto 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      font-weight: bold;
+    }
+
+    .avatar-1 {
+      background: linear-gradient(to bottom right, #3b82f6, #06b6d4);
+    }
+
+    .avatar-2 {
+      background: linear-gradient(to bottom right, #8b5cf6, #ec4899);
+    }
+
+    .avatar-3 {
+      background: linear-gradient(to bottom right, #f97316, #ef4444);
+    }
+
+    .creator h3 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .creator .role {
+      color: #60a5fa;
+      margin-bottom: 1rem;
+    }
+
+    .creator p {
+      color: #94a3b8;
+      line-height: 1.6;
+    }
+
+    .contact-box {
+      max-width: 600px;
+      margin: 0 auto;
+      background: rgba(30, 41, 59, 0.5);
+      border: 1px solid #334155;
+      border-radius: 2rem;
+      padding: 3rem;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s;
+    }
+
+    .contact-box.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .contact-icon {
+      width: 80px;
+      height: 80px;
+      color: #60a5fa;
+      margin: 0 auto 2rem;
+      display: block;
+    }
+
+    input, textarea {
+      width: 100%;
+      background: #0f172a;
+      border: 1px solid #475569;
+      border-radius: 1rem;
+      padding: 1rem 1.5rem;
+      color: white;
+      font-size: 1rem;
+      margin-bottom: 1.5rem;
+      transition: border-color 0.3s;
+    }
+
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: #3b82f6;
+    }
+
+    textarea {
+      resize: none;
+      font-family: inherit;
+    }
+
+    footer {
+      background: #0f172a;
+      border-top: 1px solid #1e293b;
+      padding: 2rem;
+      text-align: center;
+      color: #94a3b8;
+    }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 0.3;
+      }
+      50% {
+        opacity: 0.5;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hero-grid, .cards, .creators {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-text h1 {
+        font-size: 2.5rem;
+      }
+
+      nav .links {
+        gap: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="container">
+      <div class="logo"><a href="#hero">ProEduca</a></div>
+      <div class="links">
+        <a href="#project">Projeto</a>
+        <a href="#creators">Criadores</a>
+        <a href="#contact">Contato</a>
+      </div>
+    </div>
+  </nav>
+
+  <section id="hero">
+    <div class="container">
+      <div class="hero-grid">
+        <div class="hero-text">
+          <h1>
+            Revolucione Sua
+            <span class="gradient-text">Maneira de  </span>
+            <br>
+            <span class="gradient-text">Ensinar</span>
+          </h1>
+          <p>Torne materiais didáticos mais acessível e mais práticos para todos. </p>
+           <a href="#project"><button class="btn">Saiba Mais</button></a>
+        </div>
+
+        <div class="kindle-container">
+          <div class="kindle">
+            <div class="kindle-screen">
+              <div class="kindle-display">
+                <svg class="kindle-icon" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                </svg>
+              </div>
+            </div>
+            <div class="kindle-button"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="project">
+    <div class="container">
+      <div class="section-title">
+        <h2>Sobre o Projeto</h2>
+        <p>Inovação que transforma a leitura digital</p>
+      </div>
+
+      <div class="cards">
+        <div class="card">
+          <svg class="card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+          </svg>
+          <h3>Sustentabilidade</h3>
+          <p>A substituição das apostilas escolares por livros digitais reduz o consumo de papel, preserva as árvores e contribui para uma educação mais sustentável.</p>
+        </div>
+
+        <div class="card">
+          <svg class="card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+          </svg>
+          <h3>Futuro</h3>
+          <p>A substituição das apostilas escolares por livros digitais também promove a inclusão digital, ajudando os alunos a desenvolver competências tecnológicas essenciais para o futuro</p>
+        </div>
+
+        <div class="card">
+          <svg class="card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+          </svg>
+          <h3>Acessibilidade</h3>
+          <p>A substituição das apostilas escolares por livros digitais melhora a organização e a acessibilidade ao estudo, permitindo que os alunos tenham todo o material num único dispositivo, mais leve e prático</p>
+        </div>
+      </div>
+
+      <div class="mission">
+        <h3>Nossa Missão</h3>
+        <p>
+          Acreditamos que a leitura digital deve ser uma experiência imersiva e prazerosa. 
+          Nosso projeto combina hardware de última geração com software inteligente para criar 
+          um dispositivo que não apenas armazena livros, mas transforma a maneira como você 
+          interage com o conhecimento. Com tecnologia de tinta eletrônica avançada, bateria 
+          de longa duração e sincronização em nuvem, tornamos a leitura mais acessível e 
+          sustentável para todos.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section id="creators">
+    <div class="container">
+      <div class="section-title">
+        <h2>Conheça os Criadores</h2>
+        <p>A equipe por trás da inovação</p>
+      </div>
+
+      <div class="creators">
+        <div class="creator">
+          <div class="creator-avatar avatar-1">--</div>
+          <h3>Nome</h3>
+          <p class="role">Função</p>
+          <p>Detalhes</p>
+        </div>
+
+         <div class="creator">
+          <div class="creator-avatar avatar-1">--</div>
+          <h3>Nome</h3>
+          <p class="role">Função</p>
+          <p>Detalhes</p>
+        </div>
+
+         <div class="creator">
+          <div class="creator-avatar avatar-1">--</div>
+          <h3>Nome</h3>
+          <p class="role">Função</p>
+          <p>Detalhes</p>
+        </div>
+
+         <div class="creator">
+          <div class="creator-avatar avatar-1">--</div>
+          <h3>Nome</h3>
+          <p class="role">Função</p>
+          <p>Detalhes</p>
+        </div>
+
+         <div class="creator">
+          <div class="creator-avatar avatar-1">--</div>
+          <h3>Nome</h3>
+          <p class="role">Função</p>
+          <p>Detalhes</p>
+        </div>
+
+        
+      </div>
+    </div>
+  </section>
+
+<section id="contact">
+    <div class="container">
+      <div class="section-title">
+        <h2>Entre em Contato</h2>
+        <p>Tem alguma dúvida ou quer fazer parte deste projeto?</p>
+      </div>
+
+      <div class="contact-box">
+        <svg class="contact-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+        </svg>
+        
+        <form id="contactForm" action="https://formsubmit.co/matheuspirani59@gmail.com" method="POST">
+          <!-- Configurações do FormSubmit -->
+          <input type="hidden" name="_subject" value="Nova mensagem do ProEduca!">
+          <input type="hidden" name="_captcha" value="false">
+          <input type="hidden" name="_template" value="table">
+          
+          <input type="text" name="nome" placeholder="Seu nome" required>
+          <input type="email" name="email" placeholder="Seu email" required>
+          <textarea rows="5" name="mensagem" placeholder="Sua mensagem" required></textarea>
+          <button type="submit" class="btn" style="width: 100%; opacity: 1;">Enviar Mensagem</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2025 ProEduca. Todos os direitos reservados. - Made by Matheus Pirani</p>
+  </footer>
+
+  <script>
+    // Animação de scroll
+    const observerOptions = {
+      threshold: 0.2,
+      rootMargin: '0px 0px -100px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, observerOptions);
+
+    // Observar todos os elementos animáveis
+    document.querySelectorAll('.section-title, .card, .mission, .creator, .contact-box').forEach(el => {
+      observer.observe(el);
+    });
+
+    // Parallax do Kindle
+    window.addEventListener('scroll', () => {
+      const scrolled = window.pageYOffset;
+      const kindle = document.querySelector('.kindle-container');
+      if (kindle) {
+        kindle.style.transform = `translateY(${scrolled * 0.1}px)`;
+      }
+    });
+
+    // Scroll suave
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+  </script>
+</body>
+</html>
